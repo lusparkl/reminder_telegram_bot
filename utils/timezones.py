@@ -10,11 +10,15 @@ TIMEZONE_OFFSETS = {
     "UTC+8": 8, "UTC+9": 9, "UTC+10": 10, "UTC+11": 11, "UTC+12": 12
 }
 
+TIMEZONES = [
+    "UTC-12", "UTC-11", "UTC-10", "UTC-9", "UTC-8", "UTC-7", "UTC-6", "UTC-5", 
+    "UTC-4", "UTC-3", "UTC-2", "UTC-1", "UTC+0", "UTC+1", "UTC+2", "UTC+3", 
+    "UTC+4", "UTC+5", "UTC+6", "UTC+7", "UTC+8", "UTC+9", "UTC+10", "UTC+11", 
+    "UTC+12"
+]
 
 def convert_to_utc(remind_at: str, user_timezone: str) -> str:
-    """Converts the reminder time from user timezone to UTC time"""
     try:
-        # Define the datetime format
         time_format = "%Y-%m-%d %H:%M:%S"
 
         # Convert "UTC+2" to "Etc/GMT-2"
