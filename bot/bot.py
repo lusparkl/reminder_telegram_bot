@@ -3,6 +3,7 @@ from config import API_KEY
 
 bot = telebot.TeleBot(API_KEY)
 
+
 #message data:
 #{'content_type': 'text', 'id': 29, 'message_id': 29, 
 # 'from_user': {'id': 870660868, 'is_bot': False, 'first_name': 'Sashа', 'username': 'luspik', 'last_name': None, 'language_code': 'en', 'can_join_groups': None, 'can_read_all_group_messages': None, 'supports_inline_queries': None, 'is_premium': None, 'added_to_attachment_menu': None, 'can_connect_to_business': None, 'has_main_web_app': None},

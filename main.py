@@ -1,6 +1,7 @@
-import bot.user_handlers
-import bot.menus
-from bot.bot import bot  # Import the bot instance
+import bot.handlers.callbacks
+import bot.handlers.commands
+import bot.handlers.menus
+from bot.bot import bot # Import the bot instance
 
 
 # Import handlers so they get registered

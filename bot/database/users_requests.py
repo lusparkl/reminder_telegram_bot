@@ -1,4 +1,4 @@
-from database.connection import get_db_connection
+from bot.database.connection import get_db_connection
 
 def add_user(*, user_id: int, timezone: str) -> None:
     try:

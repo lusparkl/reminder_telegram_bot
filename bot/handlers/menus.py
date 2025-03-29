@@ -1,7 +1,7 @@
 from bot.bot import bot
 from telebot import types
 from telebot.util import quick_markup
-from utils.timezones import TIMEZONES
+from bot.utils.timezones import TIMEZONES
 
 def show_main_menu(*, message):
     markup = quick_markup({
