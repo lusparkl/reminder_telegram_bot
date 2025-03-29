@@ -17,9 +17,9 @@ TIMEZONES = [
     "UTC+12"
 ]
 
-def convert_to_utc(remind_at: str, user_timezone: str) -> str:
+def convert_to_utc(*, remind_at: str, user_timezone: str) -> str:
     try:
-        time_format = "%Y-%m-%d %H:%M:%S"
+        time_format = "%Y-%m-%d %H:%M"
 
         # Convert "UTC+2" to "Etc/GMT-2"
         if "UTC" in user_timezone:

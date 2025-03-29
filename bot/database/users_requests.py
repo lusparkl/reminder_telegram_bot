@@ -66,3 +66,26 @@ def update_timezone(*, user_id: int, new_timezone: str) -> None:
         conn.close()
     except Exception as e:
         print(f"Error updating timezone: {e}")
+
+
+def get_user_timezone(user_id: int) -> str:
+    """Fetch the timezone of a user from the database."""
+    try:
+        # Connect to the database
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Query to fetch the timezone
+        cursor.execute("SELECT timezone FROM users WHERE id = %s", (user_id,))
+        result = cursor.fetchone()
+
+        # Close the connection
+        cursor.close()
+        conn.close()
+
+        # Return the timezone if found, else return None
+        return result[0] if result else None
+    
+    except Exception as e:
+        print(f"Error fetching timezone for user {user_id}: {e}")
+        return None
