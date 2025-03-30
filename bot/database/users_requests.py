@@ -67,7 +67,6 @@ def update_timezone(*, user_id: int, new_timezone: str) -> None:
     except Exception as e:
         print(f"Error updating timezone: {e}")
 
-
 def get_user_timezone(user_id: int) -> str:
     """Fetch the timezone of a user from the database."""
     try:

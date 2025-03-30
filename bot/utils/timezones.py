@@ -45,3 +45,30 @@ def convert_to_utc(*, remind_at: str, user_timezone: str) -> str:
         print(f"Error converting time to UTC: {e}")
         return None
 
+def convert_from_utc(utc_time: datetime, user_timezone: str) -> str:
+    try:
+        time_format = "%Y-%m-%d %H:%M"
+
+        # Convert "UTC+3" to "Etc/GMT-3"
+        if "UTC" in user_timezone:
+            offset = int(user_timezone.replace("UTC", ""))
+            pytz_timezone = f"Etc/GMT{-offset}"  # Reverse sign due to pytz convention
+        else:
+            pytz_timezone = user_timezone  # Use valid timezone name
+
+        # Convert UTC time to user's timezone
+        utc_zone = pytz.utc
+        local_zone = pytz.timezone(pytz_timezone)
+
+        # Attach timezone to UTC datetime
+        utc_dt = utc_zone.localize(utc_time)
+
+        # Convert to user's local timezone
+        local_dt = utc_dt.astimezone(local_zone)
+
+        # Return formatted string
+        return local_dt.strftime(time_format)
+
+    except Exception as e:
+        print(f"Error converting time from UTC: {e}")
+        return None
