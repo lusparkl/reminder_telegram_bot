@@ -1,6 +1,6 @@
 from bot.database.connection import get_db_connection
 
-def add_user(*, user_id: int, timezone: str) -> None:
+def add_user(*, user_id: int, timezone: str, chat_id: int) -> None:
     try:
         # Connect to the database
         conn = get_db_connection()
@@ -14,8 +14,8 @@ def add_user(*, user_id: int, timezone: str) -> None:
             print(f"User {user_id} already exists in the database.")
         else:
             # SQL query to insert a new user
-            query = "INSERT INTO users (id, timezone) VALUES (%s, %s)"
-            cursor.execute(query, (user_id, timezone))
+            query = "INSERT INTO users (id, timezone, chat_id) VALUES (%s, %s, %s)"
+            cursor.execute(query, (user_id, timezone, chat_id))
 
             # Commit the changes and close the connection
             conn.commit()
@@ -87,4 +87,26 @@ def get_user_timezone(user_id: int) -> str:
     
     except Exception as e:
         print(f"Error fetching timezone for user {user_id}: {e}")
+        return None
+
+def get_chat_id(user_id: int) -> int | None:
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+
+        # Query to fetch chat_id
+        cursor.execute("SELECT chat_id FROM users WHERE id = %s;", (user_id,))
+        result = cursor.fetchone()
+
+        cursor.close()
+        conn.close()
+
+        if result[0]:
+            return result[0]  # Return chat_id
+        else:
+            print(f"❌ No chat_id found for user {user_id}")
+            return None
+
+    except Exception as e:
+        print(f"❌ Error fetching chat_id: {e}")
         return None

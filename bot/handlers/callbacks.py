@@ -18,6 +18,7 @@ def handle_callbacks(call):
     elif call.data == "All reminders":
         bot.delete_message(call.message.chat.id, call.message.message_id)
         get_all_reminders(call=call)
+        print(call.message.chat.id)
     elif call.data == "Back to main menu":
         bot.delete_message(call.message.chat.id, call.message.message_id)
         show_main_menu(message=call.message)
@@ -26,11 +27,12 @@ def handle_callbacks(call):
 def handle_time_zones(call):
     tz = call.data  # This is the timezone selected by the user
     user_id = call.from_user.id
+    chat_id = call.message.chat.id
     #Update user's timezone if user already in db
     if user_exists(user_id=user_id):
         update_timezone(user_id=user_id, new_timezone=tz)
     else:
-        add_user(user_id=user_id, timezone=tz)
+        add_user(user_id=user_id, timezone=tz, chat_id=chat_id)
     
     bot.send_message(chat_id=call.message.chat.id, text=f"You succesfully changed timezone, now your time zone is {tz}")
     bot.delete_message(call.message.chat.id, call.message.message_id)
@@ -92,4 +94,5 @@ def get_all_reminders(*, call):
         remind_at_user_timezone = convert_from_utc(utc_time=remind_at_utc, user_timezone=user_timezone)
         message_text += f"- *{reminder_text}* -🕒{remind_at_user_timezone} \n"
     bot.send_message(chat_id=message.chat.id, text=message_text, reply_markup=back_to_main_menu_markup, parse_mode="Markdown")
+
 

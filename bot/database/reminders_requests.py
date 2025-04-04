@@ -66,3 +66,23 @@ def get_info_about_all_reminders(*, user_id: int) -> list:
     except Exception as e:
         print(f"Error getting reminders for user {user_id}: {e}")
         return []
+
+
+def get_pending_reminders(current_time):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = "SELECT id, user_id, description, remind_at FROM reminders WHERE remind_at <= %s AND sent = FALSE"
+    cursor.execute(query, (current_time,))
+    reminders = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return reminders
+
+def mark_reminder_as_sent(reminder_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    query = "UPDATE reminders SET sent = TRUE WHERE id = %s"
+    cursor.execute(query, (reminder_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
