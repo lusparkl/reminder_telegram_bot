@@ -7,7 +7,6 @@ from bot.utils.timezones import TIMEZONES, convert_to_utc, convert_from_utc
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_callbacks(call):
-    #callback for timezones
     if call.data in TIMEZONES:
         handle_time_zones(call)
     elif call.data == "Change timezone":
@@ -18,7 +17,6 @@ def handle_callbacks(call):
     elif call.data == "All reminders":
         bot.delete_message(call.message.chat.id, call.message.message_id)
         get_all_reminders(call=call)
-        print(call.message.chat.id)
     elif call.data == "Back to main menu":
         bot.delete_message(call.message.chat.id, call.message.message_id)
         show_main_menu(message=call.message)
@@ -28,7 +26,6 @@ def handle_time_zones(call):
     tz = call.data  # This is the timezone selected by the user
     user_id = call.from_user.id
     chat_id = call.message.chat.id
-    #Update user's timezone if user already in db
     if user_exists(user_id=user_id):
         update_timezone(user_id=user_id, new_timezone=tz)
     else:
@@ -38,7 +35,7 @@ def handle_time_zones(call):
     bot.delete_message(call.message.chat.id, call.message.message_id)
     show_main_menu(message=call.message)
 
-#reminder creation
+
 def handle_reminder_creation(*, call):
     user_id = call.from_user.id
     if not user_exists(user_id=user_id):
@@ -67,7 +64,6 @@ def add_reminder_to_db(message, reminder_title):
     user_timezone = get_user_timezone(user_id=user_id)
     reminder_time_utc = convert_to_utc(remind_at=reminder_time, user_timezone=user_timezone)
 
-    #Check if convertation was succed
     if reminder_time_utc:
         create_reminder(user_id=user_id, description=reminder_title, remind_at=reminder_time_utc)
         bot.send_message(chat_id=message.chat.id, text=f"Your reminder \"{reminder_title}\" was created succesfully!")
@@ -76,7 +72,7 @@ def add_reminder_to_db(message, reminder_title):
         bot.send_message(chat_id=message.chat.id, text="Smth went wrong, may be your date format wasnt right, try again.")
         bot.register_next_step_handler(message, add_reminder_to_db, reminder_title)
     
-#show all reminders
+
 def get_all_reminders(*, call):
     message = call.message
     user_id = call.from_user.id

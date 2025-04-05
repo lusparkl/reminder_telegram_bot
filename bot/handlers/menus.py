@@ -7,10 +7,9 @@ def show_main_menu(*, message):
     markup = quick_markup({
     "Create reminder": {"callback_data": "Create reminder"},
     "All reminders": {"callback_data": "All reminders"},
-    "Delete reminder": {"callback_data": "Delete reminder"},
     "Change timezone": {"callback_data": "Change timezone"},
 }, row_width=2)
-    bot.send_photo(chat_id=message.chat.id, photo="https://images.pexels.com/photos/1616516/pexels-photo-1616516.jpeg?cs=srgb&dl=pexels-lastly-1616516.jpg&fm=jpg", caption="Hello there👋! Choose what you wanna do:", reply_markup=markup)
+    bot.send_photo(chat_id=message.chat.id, photo="https://i.pinimg.com/originals/1f/a9/e5/1fa9e5cf373c22aba39df7f5754bca07.jpg", caption="Hello there👋! Choose what you wanna do:", reply_markup=markup)
 
 def show_time_zones(*, message):
     markup = types.InlineKeyboardMarkup()

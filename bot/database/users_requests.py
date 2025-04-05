@@ -2,26 +2,21 @@ from bot.database.connection import get_db_connection
 
 def add_user(*, user_id: int, timezone: str, chat_id: int) -> None:
     try:
-        # Connect to the database
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Check if the user already exists
         cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
         existing_user = cursor.fetchone()
 
         if existing_user:
             print(f"User {user_id} already exists in the database.")
         else:
-            # SQL query to insert a new user
             query = "INSERT INTO users (id, timezone, chat_id) VALUES (%s, %s, %s)"
             cursor.execute(query, (user_id, timezone, chat_id))
 
-            # Commit the changes and close the connection
             conn.commit()
             print(f"User {user_id} added to the database.")
 
-        # Close the connection
         cursor.close()
         conn.close()
 
@@ -30,19 +25,15 @@ def add_user(*, user_id: int, timezone: str, chat_id: int) -> None:
 
 def user_exists(*, user_id: int) -> bool:
     try:
-        # Connect to the database
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Check if the user exists in the database
         cursor.execute("SELECT id FROM users WHERE id = %s", (user_id,))
         existing_user = cursor.fetchone()
 
-        # Close the connection
         cursor.close()
         conn.close()
 
-        # If user exists, return True
         return existing_user is not None
     except Exception as e:
         print(f"Error checking if user exists: {e}")
@@ -50,39 +41,31 @@ def user_exists(*, user_id: int) -> bool:
     
 def update_timezone(*, user_id: int, new_timezone: str) -> None:
     try:
-        # Connect to the database
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # SQL query to update the timezone
         query = "UPDATE users SET timezone = %s WHERE id = %s"
         cursor.execute(query, (new_timezone, user_id))
         conn.commit()
 
         print(f"User {user_id}'s timezone updated to {new_timezone}.")
 
-        # Close the connection
         cursor.close()
         conn.close()
     except Exception as e:
         print(f"Error updating timezone: {e}")
 
 def get_user_timezone(user_id: int) -> str:
-    """Fetch the timezone of a user from the database."""
     try:
-        # Connect to the database
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Query to fetch the timezone
         cursor.execute("SELECT timezone FROM users WHERE id = %s", (user_id,))
         result = cursor.fetchone()
 
-        # Close the connection
         cursor.close()
         conn.close()
 
-        # Return the timezone if found, else return None
         return result[0] if result else None
     
     except Exception as e:
@@ -94,7 +77,6 @@ def get_chat_id(user_id: int) -> int | None:
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Query to fetch chat_id
         cursor.execute("SELECT chat_id FROM users WHERE id = %s;", (user_id,))
         result = cursor.fetchone()
 

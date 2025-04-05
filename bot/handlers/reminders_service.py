@@ -9,26 +9,18 @@ from bot.database.users_requests import get_chat_id
 scheduler = BackgroundScheduler()
 
 def process_due_reminders():
-    """Fetch and send due reminders."""
-    now_utc = datetime.utcnow()  # Current time in UTC
+    now_utc = datetime.utcnow()  
     pending_reminders = get_pending_reminders(now_utc)
 
     for reminder in pending_reminders:
-        user_id, description, remind_at = reminder[1], reminder[2], reminder[3] 
+        user_id, description, = reminder[1], reminder[2]
         chat_id = get_chat_id(user_id=user_id)
-        print(chat_id)
-        # Convert reminder time to user's timezone
-        # Send the reminder message
         bot.send_message(chat_id, f"🔔 Reminder: *{description}*\n", parse_mode="Markdown")
 
-        # Mark the reminder as sent
-        mark_reminder_as_sent(reminder[0])  # Assuming reminder[0] is the ID
+        mark_reminder_as_sent(reminder[0])
 
 def start_reminder_service():
-    """Start the reminder service."""
     scheduler.add_job(process_due_reminders, 'interval', minutes=1)
     scheduler.start()
-
 def stop_reminder_service():
-    """Stop the reminder service."""
     scheduler.shutdown()
